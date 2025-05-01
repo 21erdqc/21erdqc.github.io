@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <title>erdqc Site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <!-- Cascadia Code font -->
   <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code&display=swap" rel="stylesheet">
-  <!-- Font Awesome for icons -->
+
+  <!-- Font Awesome for social icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
     :root {
       --bg-color-dark: #111111;
@@ -69,14 +72,37 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      transition: color 0.3s ease;
     }
 
     .social-box a:hover {
-      text-decoration: underline;
+      color: #4169E1;
+    }
+
+    .social-box a:hover img {
+      filter: brightness(0) saturate(100%) invert(27%) sepia(79%) saturate(748%) hue-rotate(200deg) brightness(92%) contrast(91%);
+    }
+
+    .bottom-center {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .social-box img {
+      width: 16px;
+      height: 16px;
+      filter: invert(100%);
+      vertical-align: middle;
+      transition: filter 0.3s ease;
     }
   </style>
 </head>
 <body class="dark-mode">
+
   <div class="top-left">
     <a href="#">erdqc</a>
   </div>
@@ -84,30 +110,47 @@
   <div class="top-center" id="themeToggle">☀️</div>
 
   <div class="social-box">
-  <div><a href="https://instagram.com/21erdqc" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></div>
-  <div><a href="https://discord.gg/war3enf3Ur" target="_blank"><i class="fab fa-discord"></i> Discord</a></div>
-  <div><a href="https://open.spotify.com/user/31bk2upkw65bpppulnqfucgclkbu?si=92b80491419d4a59" target="_blank"><i class="fab fa-spotify"></i> Spotify</a></div>
-  <div><a href="https://www.youtube.com/@erdqc99" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></div>
-  <div><a href="https://xdaforums.com/m/erdqc.12970596/" target="_blank"><i class="fas fa-user-cog"></i> XDA</a></div>
-  <div><a href="https://steamcommunity.com/id/erdqc1" target="_blank"><i class="fab fa-steam"></i> Steam</a></div>
-  <div><a href="https://www.roblox.com/users/2345178516/profile" target="_blank"><i class="fas fa-cube"></i> Roblox</a></div>
-</div>
+    <div><a href="https://instagram.com/21erdqc" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></div>
+    <div><a href="https://discord.gg/war3enf3Ur" target="_blank"><i class="fab fa-discord"></i> Discord</a></div>
+    <div><a href="https://open.spotify.com/user/31bk2upkw65bpppulnqfucgclkbu?si=92b80491419d4a59" target="_blank"><i class="fab fa-spotify"></i> Spotify</a></div>
+    <div><a href="https://www.youtube.com/@erdqc99" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></div>
+    <div>
+      <a href="https://xdaforums.com/m/erdqc.12970596/" target="_blank">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSskOJ-JFlKOXBOgpWMGhPsvpcLtyT3WBOGVQ&s" alt="XDA"> XDA
+      </a>
+    </div>
+    <div><a href="https://steamcommunity.com/id/erdqc1" target="_blank"><i class="fab fa-steam"></i> Steam</a></div>
+    <div>
+      <a href="https://www.roblox.com/users/2345178516/profile" target="_blank">
+        <img src="https://userstyles.org/style_screenshots/250841_after.png?r=1746032414" alt="Roblox"> Roblox
+      </a>
+    </div>
+  </div>
+
+  <div class="bottom-center" id="timeDisplay">--:--:--</div>
 
   <script>
+    // Theme toggle
     const toggle = document.getElementById('themeToggle');
     const body = document.body;
 
     toggle.addEventListener('click', () => {
       body.classList.toggle('light-mode');
-      if (body.classList.contains('light-mode')) {
-        toggle.textContent = '🌙';
-      } else {
-        toggle.textContent = '☀️';
-      }
+      toggle.textContent = body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
-    // Initial icon
     toggle.textContent = body.classList.contains('light-mode') ? '🌙' : '☀️';
+
+    // Time and time zone
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString();
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      document.getElementById('timeDisplay').textContent = `${timeString} (${timeZone})`;
+    }
+
+    setInterval(updateTime, 1000);
+    updateTime();
   </script>
 </body>
 </html>
