@@ -7,8 +7,6 @@
 
   <!-- Cascadia Code font -->
   <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome for social icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -79,6 +77,13 @@
       color: #4169E1;
     }
 
+    .social-box img {
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+      transition: filter 0.3s ease;
+    }
+
     .bottom-center {
       position: absolute;
       bottom: 20px;
@@ -86,18 +91,6 @@
       transform: translateX(-50%);
       text-align: center;
       font-size: 14px;
-    }
-
-    .theme-icon {
-      width: 16px;
-      height: 16px;
-      vertical-align: middle;
-      transition: filter 0.3s ease;
-      filter: invert(100%);
-    }
-
-    body.light-mode .theme-icon {
-      filter: invert(0%);
     }
   </style>
 </head>
@@ -116,13 +109,13 @@
     <div><a href="https://www.youtube.com/@erdqc99" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></div>
     <div>
       <a href="https://xdaforums.com/m/erdqc.12970596/" target="_blank">
-        <img src="https://i.imgur.com/JewOAKM.png" alt="XDA" class="theme-icon"> XDA
+        <img id="xdaLogo" src="https://i.imgur.com/JewOAKM.png" alt="XDA"> XDA
       </a>
     </div>
     <div><a href="https://steamcommunity.com/id/erdqc1" target="_blank"><i class="fab fa-steam"></i> Steam</a></div>
     <div>
       <a href="https://www.roblox.com/users/2345178516/profile" target="_blank">
-        <img src="https://userstyles.org/style_screenshots/250841_after.png?r=1746032414" alt="Roblox" class="theme-icon"> Roblox
+        <img id="robloxLogo" src="https://userstyles.org/style_screenshots/250841_after.png?r=1746032414" alt="Roblox"> Roblox
       </a>
     </div>
   </div>
@@ -130,18 +123,37 @@
   <div class="bottom-center" id="timeDisplay">--:--:--</div>
 
   <script>
-    // Theme toggle
     const toggle = document.getElementById('themeToggle');
     const body = document.body;
+
+    const xdaLogo = document.getElementById('xdaLogo');
+    const robloxLogo = document.getElementById('robloxLogo');
+
+    const darkLogos = {
+      xda: 'https://i.imgur.com/JewOAKM.png',
+      roblox: 'https://userstyles.org/style_screenshots/250841_after.png?r=1746032414'
+    };
+
+    const lightLogos = {
+      xda: 'https://i.imgur.com/JewOAKM.png', // Replace with light version if available
+      roblox: 'https://userstyles.org/style_screenshots/250841_after.png?r=1746032414' // Replace with light version if needed
+    };
+
+    function updateThemeAssets() {
+      const isLight = body.classList.contains('light-mode');
+      xdaLogo.src = isLight ? lightLogos.xda : darkLogos.xda;
+      robloxLogo.src = isLight ? lightLogos.roblox : darkLogos.roblox;
+    }
 
     toggle.addEventListener('click', () => {
       body.classList.toggle('light-mode');
       toggle.textContent = body.classList.contains('light-mode') ? '🌙' : '☀️';
+      updateThemeAssets();
     });
 
     toggle.textContent = body.classList.contains('light-mode') ? '🌙' : '☀️';
+    updateThemeAssets();
 
-    // Time and time zone
     function updateTime() {
       const now = new Date();
       const timeString = now.toLocaleTimeString();
