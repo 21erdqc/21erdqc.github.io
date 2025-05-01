@@ -79,33 +79,8 @@
       color: #4169E1;
     }
 
-    .social-box img {
-      width: 16px;
-      height: 16px;
-      vertical-align: middle;
-      transition: filter 0.3s ease;
-    }
-
-    /* Invert image icons in dark mode only */
-    body.dark-mode .social-box img.invert-img {
-      filter: invert(100%);
-    }
-
-    body.light-mode .social-box img.invert-img {
-      filter: invert(0%);
-    }
-
-    /* Font Awesome icons: color swap per theme */
-    .social-box i {
-      transition: color 0.3s ease;
-    }
-
-    body.dark-mode .social-box i {
-      color: white;
-    }
-
-    body.light-mode .social-box i {
-      color: black;
+    .social-box a:hover img {
+      filter: brightness(0) saturate(100%) invert(27%) sepia(79%) saturate(748%) hue-rotate(200deg) brightness(92%) contrast(91%);
     }
 
     .bottom-center {
@@ -115,6 +90,22 @@
       transform: translateX(-50%);
       text-align: center;
       font-size: 14px;
+    }
+
+    .social-box img {
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+      transition: filter 0.3s ease;
+    }
+
+    /* Light/Dark filter for XDA & Roblox */
+    body.light-mode .social-box img.invert-img {
+      filter: invert(100%);
+    }
+
+    body.dark-mode .social-box img.invert-img {
+      filter: invert(0%);
     }
   </style>
 </head>
@@ -131,6 +122,7 @@
     <div><a href="https://discord.gg/war3enf3Ur" target="_blank"><i class="fab fa-discord"></i> Discord</a></div>
     <div><a href="https://open.spotify.com/user/31bk2upkw65bpppulnqfucgclkbu?si=92b80491419d4a59" target="_blank"><i class="fab fa-spotify"></i> Spotify</a></div>
     <div><a href="https://www.youtube.com/@erdqc99" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></div>
+    <div><a href="https://tiktok.com/21erdqc_" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a></div>
     <div>
       <a href="https://xdaforums.com/m/erdqc.12970596/" target="_blank">
         <img class="invert-img" src="https://i.imgur.com/JewOAKM.png" alt="XDA"> XDA
@@ -142,12 +134,12 @@
         <img class="invert-img" src="https://userstyles.org/style_screenshots/250841_after.png?r=1746032414" alt="Roblox"> Roblox
       </a>
     </div>
-    <div><a href="https://tiktok.com/21erdqc_" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a></div>
   </div>
 
   <div class="bottom-center" id="timeDisplay">--:--:--</div>
 
   <script>
+    // Theme toggle
     const toggle = document.getElementById('themeToggle');
     const body = document.body;
 
@@ -158,6 +150,7 @@
 
     toggle.textContent = body.classList.contains('light-mode') ? '🌙' : '☀️';
 
+    // Time and time zone
     function updateTime() {
       const now = new Date();
       const timeString = now.toLocaleTimeString();
