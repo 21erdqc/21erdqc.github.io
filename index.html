@@ -95,9 +95,17 @@
     .social-box img {
       width: 16px;
       height: 16px;
-      filter: invert(100%);
       vertical-align: middle;
       transition: filter 0.3s ease;
+    }
+
+    /* Theme-based icon filters */
+    body.dark-mode .social-box img.theme-icon {
+      filter: invert(100%);
+    }
+
+    body.light-mode .social-box img.theme-icon {
+      filter: invert(0%);
     }
   </style>
 </head>
@@ -116,13 +124,13 @@
     <div><a href="https://www.youtube.com/@erdqc99" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></div>
     <div>
       <a href="https://xdaforums.com/m/erdqc.12970596/" target="_blank">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSskOJ-JFlKOXBOgpWMGhPsvpcLtyT3WBOGVQ&s" alt="XDA"> XDA
+        <img src="/mnt/data/bb7bc5fe-a271-40d7-91d7-2360e014a163.png" alt="XDA" class="theme-icon"> XDA
       </a>
     </div>
     <div><a href="https://steamcommunity.com/id/erdqc1" target="_blank"><i class="fab fa-steam"></i> Steam</a></div>
     <div>
       <a href="https://www.roblox.com/users/2345178516/profile" target="_blank">
-        <img src="https://userstyles.org/style_screenshots/250841_after.png?r=1746032414" alt="Roblox"> Roblox
+        <img src="/mnt/data/bb7bc5fe-a271-40d7-91d7-2360e014a163.png" alt="Roblox" class="theme-icon"> Roblox
       </a>
     </div>
   </div>
