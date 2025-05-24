@@ -5,113 +5,31 @@
   <title>erdqc Site</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Cascadia Code font -->
   <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code&display=swap" rel="stylesheet" />
-  <!-- Font Awesome for social icons -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   />
 
   <style>
-    :root {
-      --bg-color-dark: #000000;
-      --bg-color-light: #f5f5f5;
-      --text-color-dark: white;
-      --text-color-light: black;
-    }
-
     body {
       margin: 0;
-      background-color: var(--bg-color-dark);
+      background-color: black;
       font-family: 'Cascadia Code', monospace;
-      color: var(--text-color-dark);
-      transition: background-color 0.3s ease, color 0.3s ease;
+      color: white;
       overflow: hidden;
     }
-
-    body.light-mode {
-      background-color: var(--bg-color-light);
-      color: var(--text-color-light);
-    }
-
-    canvas.webgl {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      width: 100vw;
-      height: 100vh;
-      display: block;
-    }
-
-    .top-left {
-      position: absolute;
-      top: 10px;
-      left: 20px;
-    }
-
-    .top-left a {
-      text-decoration: none;
-      color: inherit;
-      font-size: 20px;
-    }
-
-    .top-left a:hover {
-      text-decoration: underline;
-    }
-
-    .top-center {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
-      font-size: 20px;
-      user-select: none;
-    }
-
-    .social-box {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      font-size: 14px;
-      line-height: 1.8;
-    }
-
-    .social-box a {
-      color: inherit;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: color 0.3s ease, transform 0.3s ease;
-    }
-
-    .social-box a:hover {
-      color: #4169e1;
-      transform: translateX(4px);
-    }
-
-    .bottom-center {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      font-size: 14px;
-    }
+    .top-left { position: absolute; top: 10px; left: 20px; }
+    .top-center { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); cursor: pointer; font-size: 20px; user-select: none; }
+    .social-box { position: absolute; bottom: 20px; left: 20px; font-size: 14px; line-height: 1.8; }
+    .social-box a { color: inherit; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.3s ease, transform 0.3s ease; }
+    .social-box a:hover { color: #4169e1; transform: translateX(4px); }
+    .bottom-center { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; font-size: 14px; }
   </style>
 </head>
 
-<body class="dark-mode">
-  <!-- WebGL Fluid Canvas -->
-  <canvas class="webgl" id="webglCanvas"></canvas>
-
-  <div class="top-left">
-    <a href="#">erdqc</a>
-  </div>
-
+<body>
+  <div class="top-left"><a href="#">erdqc</a></div>
   <div class="top-center" id="themeToggle">☀️</div>
 
   <div class="social-box">
@@ -125,28 +43,19 @@
 
   <div class="bottom-center" id="timeDisplay">--:--:--</div>
 
-  <!-- Fluid Simulation -->
-  <script src="https://cdn.jsdelivr.net/gh/PavelDoGreat/WebGL-Fluid-Simulation/fluid.min.js"></script>
+  <!-- Include fluid simulation script -->
+  <script src="https://cdn.jsdelivr.net/gh/PavelDoGreat/WebGL-Fluid-Simulation/script.js"></script>
+
   <script>
-    const canvas = document.getElementById('webglCanvas');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    initFluidSimulation(canvas);
-
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-
-    // Optional config (if CONFIG is supported by the script version)
-    if (typeof CONFIG !== 'undefined') {
+    // Optional configs from the script.js global CONFIG object
+    if (typeof CONFIG !== "undefined") {
       CONFIG.SHADING = true;
       CONFIG.BLOOM = true;
       CONFIG.COLORFUL = true;
       CONFIG.SPLAT_RADIUS = 0.008;
     }
 
+    // Automated random splashes for cool effect
     function randomColor() {
       return { r: Math.random(), g: Math.random(), b: Math.random() };
     }
@@ -157,33 +66,27 @@
       const dx = (Math.random() - 0.5) * 1000;
       const dy = (Math.random() - 0.5) * 1000;
       const color = randomColor();
-      if (typeof splat === 'function') {
+      if (typeof splat === "function") {
         splat(x, y, dx, dy, color);
       }
     }
 
     setInterval(autoSplash, 2500);
-  </script>
 
-  <!-- Theme toggle -->
-  <script>
-    const toggle = document.getElementById('themeToggle');
-    const body = document.body;
-
-    toggle.addEventListener('click', () => {
-      body.classList.toggle('light-mode');
-      toggle.textContent = body.classList.contains('light-mode') ? '🌙' : '☀️';
+    // Theme toggle button
+    const toggle = document.getElementById("themeToggle");
+    toggle.addEventListener("click", () => {
+      document.body.classList.toggle("light-mode");
+      toggle.textContent = document.body.classList.contains("light-mode") ? "🌙" : "☀️";
     });
-    toggle.textContent = body.classList.contains('light-mode') ? '🌙' : '☀️';
-  </script>
+    toggle.textContent = document.body.classList.contains("light-mode") ? "🌙" : "☀️";
 
-  <!-- Time display -->
-  <script>
+    // Clock display
     function updateTime() {
       const now = new Date();
       const timeString = now.toLocaleTimeString();
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      document.getElementById('timeDisplay').textContent = `${timeString} (${timeZone})`;
+      document.getElementById("timeDisplay").textContent = `${timeString} (${timeZone})`;
     }
     setInterval(updateTime, 1000);
     updateTime();
