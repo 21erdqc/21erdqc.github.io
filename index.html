@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <title>erdqc Site</title>
@@ -7,7 +7,6 @@
 
   <!-- Cascadia Code font -->
   <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code&display=swap" rel="stylesheet">
-
   <!-- Font Awesome for social icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -33,7 +32,7 @@
       color: var(--text-color-light);
     }
 
-    canvas {
+    canvas.webgl {
       position: fixed;
       top: 0;
       left: 0;
@@ -100,7 +99,8 @@
 </head>
 <body class="dark-mode">
 
-  <canvas id="trailCanvas"></canvas>
+  <!-- WebGL Canvas -->
+  <canvas class="webgl" id="webglCanvas"></canvas>
 
   <div class="top-left">
     <a href="#">erdqc</a>
@@ -119,8 +119,11 @@
 
   <div class="bottom-center" id="timeDisplay">--:--:--</div>
 
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+
   <script>
-    // Theme toggle
+    // Tema geçişi
     const toggle = document.getElementById('themeToggle');
     const body = document.body;
 
@@ -128,67 +131,79 @@
       body.classList.toggle('light-mode');
       toggle.textContent = body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
-
     toggle.textContent = body.classList.contains('light-mode') ? '🌙' : '☀️';
 
+    // Saat
     function updateTime() {
       const now = new Date();
       const timeString = now.toLocaleTimeString();
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       document.getElementById('timeDisplay').textContent = `${timeString} (${timeZone})`;
     }
-
     setInterval(updateTime, 1000);
     updateTime();
 
-    // Canvas fluid-like trail
-    const canvas = document.getElementById("trailCanvas");
-    const ctx = canvas.getContext("2d");
-    let particles = [];
+    // Three.js Mouse Particles
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webglCanvas'), antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+
+    const particles = [];
+    const geometry = new THREE.SphereGeometry(0.05, 8, 8);
+
+    function getRandomColor() {
+      return new THREE.Color(`hsl(${Math.random() * 360}, 100%, 60%)`);
     }
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
+
+    function createParticle(x, y) {
+      const material = new THREE.MeshBasicMaterial({ color: getRandomColor(), transparent: true });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(x, y, 0);
+      scene.add(mesh);
+      particles.push({ mesh, life: 100 });
+    }
+
+    function getMousePos(event) {
+      const x = (event.clientX / window.innerWidth) * 2 - 1;
+      const y = -(event.clientY / window.innerHeight) * 2 + 1;
+      return { x: x * 2.5, y: y * 2.5 };
+    }
+
+    let mouseMoving = false;
+    let mouseTimeout;
 
     document.addEventListener("mousemove", (e) => {
-      for (let i = 0; i < 4; i++) {
-        particles.push({
-          x: e.clientX,
-          y: e.clientY,
-          vx: (Math.random() - 0.5) * 2,
-          vy: (Math.random() - 0.5) * 2,
-          radius: Math.random() * 5 + 2,
-          life: 60,
-          hue: Math.floor(Math.random() * 360)
-        });
+      mouseMoving = true;
+      clearTimeout(mouseTimeout);
+      mouseTimeout = setTimeout(() => { mouseMoving = false; }, 150);
+
+      const pos = getMousePos(e);
+      for (let i = 0; i < 3; i++) {
+        createParticle(pos.x, pos.y);
       }
     });
 
     function animate() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      requestAnimationFrame(animate);
 
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
+      particles.forEach((p, i) => {
         p.life -= 1;
-        p.radius *= 0.96;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `hsl(${p.hue}, 100%, 60%)`;
-        ctx.fill();
-
-        if (p.life <= 0 || p.radius < 0.5) {
+        p.mesh.material.opacity = p.life / 100;
+        if (p.life <= 0) {
+          scene.remove(p.mesh);
           particles.splice(i, 1);
         }
-      }
+      });
 
-      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
     }
 
     animate();
