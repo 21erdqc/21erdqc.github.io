@@ -38,14 +38,15 @@
       color: var(--text-color-light);
     }
 
-    canvas.webgl {
+    /* The fluid simulation injects a canvas automatically */
+    canvas {
       display: block;
       position: fixed;
       top: 0;
       left: 0;
-      z-index: -1;
       width: 100vw;
       height: 100vh;
+      z-index: -1;
     }
 
     .top-left {
@@ -124,9 +125,6 @@
   </style>
 </head>
 <body class="dark-mode">
-  <!-- Fluid Simulation Canvas -->
-  <canvas class="webgl" id="webglCanvas"></canvas>
-
   <div class="top-left">
     <a href="#">erdqc</a>
   </div>
@@ -140,45 +138,44 @@
 
   <div class="social-box">
     <div>
-      <a href="https://instagram.com/21erdqc" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+      <a href="https://instagram.com/21erdqc" target="_blank"
+        ><i class="fab fa-instagram"></i> Instagram</a
+      >
     </div>
     <div>
-      <a href="https://discord.gg/war3enf3Ur" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+      <a href="https://discord.gg/war3enf3Ur" target="_blank"
+        ><i class="fab fa-discord"></i> Discord</a
+      >
     </div>
     <div>
-      <a href="https://open.spotify.com/user/31bk2upkw65bpppulnqfucgclkbu?si=92b80491419d4a59" target="_blank"><i class="fab fa-spotify"></i> Spotify</a>
+      <a href="https://open.spotify.com/user/31bk2upkw65bpppulnqfucgclkbu?si=92b80491419d4a59" target="_blank"
+        ><i class="fab fa-spotify"></i> Spotify</a
+      >
     </div>
     <div>
-      <a href="https://www.youtube.com/@erdqc99" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+      <a href="https://www.youtube.com/@erdqc99" target="_blank"
+        ><i class="fab fa-youtube"></i> YouTube</a
+      >
     </div>
     <div>
-      <a href="https://steamcommunity.com/id/erdqc1" target="_blank"><i class="fab fa-steam"></i> Steam</a>
+      <a href="https://steamcommunity.com/id/erdqc1" target="_blank"
+        ><i class="fab fa-steam"></i> Steam</a
+      >
     </div>
     <div>
-      <a href="https://tiktok.com/21erdqc_" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a>
+      <a href="https://tiktok.com/21erdqc_" target="_blank"
+        ><i class="fab fa-tiktok"></i> TikTok</a
+      >
     </div>
   </div>
 
   <div class="bottom-center" id="timeDisplay">--:--:--</div>
 
-  <!-- Fluid Simulation Script -->
-  <script src="https://cdn.jsdelivr.net/gh/PavelDoGreat/WebGL-Fluid-Simulation/fluid.min.js"></script>
+  <!-- Load original WebGL Fluid Simulation script -->
+  <script src="https://cdn.jsdelivr.net/gh/PavelDoGreat/WebGL-Fluid-Simulation/script.js"></script>
 
   <script>
-    const canvas = document.getElementById("webglCanvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    // Initialize the fluid simulation with the canvas
-    initFluidSimulation(canvas);
-
-    // Resize canvas on window resize
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-
-    // Optional: customize fluid simulation config
+    // Optional configuration customization (only works after script.js loaded)
     if (typeof CONFIG !== "undefined") {
       CONFIG.SHADING = true;
       CONFIG.BLOOM = true;
@@ -186,7 +183,7 @@
       CONFIG.SPLAT_RADIUS = 0.008;
     }
 
-    // Periodically add random splashes
+    // Periodically add random splashes to fluid background
     function randomColor() {
       return { r: Math.random(), g: Math.random(), b: Math.random() };
     }
@@ -201,6 +198,7 @@
         splat(x, y, dx, dy, color);
       }
     }
+
     setInterval(autoSplash, 2500);
   </script>
 
