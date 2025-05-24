@@ -25,11 +25,19 @@
       font-family: 'Cascadia Code', monospace;
       color: var(--text-color-dark);
       transition: background-color 0.3s ease, color 0.3s ease;
+      overflow: hidden;
     }
 
     body.light-mode {
       background-color: var(--bg-color-light);
       color: var(--text-color-light);
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
 
     .top-left {
@@ -92,6 +100,8 @@
 </head>
 <body class="dark-mode">
 
+  <canvas id="trailCanvas"></canvas>
+
   <div class="top-left">
     <a href="#">erdqc</a>
   </div>
@@ -110,6 +120,7 @@
   <div class="bottom-center" id="timeDisplay">--:--:--</div>
 
   <script>
+    // Theme toggle
     const toggle = document.getElementById('themeToggle');
     const body = document.body;
 
@@ -129,6 +140,58 @@
 
     setInterval(updateTime, 1000);
     updateTime();
+
+    // Canvas fluid-like trail
+    const canvas = document.getElementById("trailCanvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    document.addEventListener("mousemove", (e) => {
+      for (let i = 0; i < 4; i++) {
+        particles.push({
+          x: e.clientX,
+          y: e.clientY,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          radius: Math.random() * 5 + 2,
+          life: 60,
+          hue: Math.floor(Math.random() * 360)
+        });
+      }
+    });
+
+    function animate() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 1;
+        p.radius *= 0.96;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `hsl(${p.hue}, 100%, 60%)`;
+        ctx.fill();
+
+        if (p.life <= 0 || p.radius < 0.5) {
+          particles.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
   </script>
 </body>
 </html>
