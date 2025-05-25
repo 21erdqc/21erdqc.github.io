@@ -1,95 +1,15 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>erdqc Site</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code&display=swap" rel="stylesheet" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
-
+  <meta charset="UTF-8">
+  <title>Boş Sayfa</title>
   <style>
     body {
       margin: 0;
-      background-color: black;
-      font-family: 'Cascadia Code', monospace;
-      color: white;
-      overflow: hidden;
+      background-color: #0A0A0A;
     }
-    .top-left { position: absolute; top: 10px; left: 20px; }
-    .top-center { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); cursor: pointer; font-size: 20px; user-select: none; }
-    .social-box { position: absolute; bottom: 20px; left: 20px; font-size: 14px; line-height: 1.8; }
-    .social-box a { color: inherit; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.3s ease, transform 0.3s ease; }
-    .social-box a:hover { color: #4169e1; transform: translateX(4px); }
-    .bottom-center { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; font-size: 14px; }
   </style>
 </head>
-
 <body>
-  <div class="top-left"><a href="#">erdqc</a></div>
-  <div class="top-center" id="themeToggle">☀️</div>
-
-  <div class="social-box">
-    <div><a href="https://instagram.com/21erdqc" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></div>
-    <div><a href="https://discord.gg/war3enf3Ur" target="_blank"><i class="fab fa-discord"></i> Discord</a></div>
-    <div><a href="https://open.spotify.com/user/31bk2upkw65bpppulnqfucgclkbu?si=92b80491419d4a59" target="_blank"><i class="fab fa-spotify"></i> Spotify</a></div>
-    <div><a href="https://www.youtube.com/@erdqc99" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></div>
-    <div><a href="https://steamcommunity.com/id/erdqc1" target="_blank"><i class="fab fa-steam"></i> Steam</a></div>
-    <div><a href="https://tiktok.com/21erdqc_" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a></div>
-  </div>
-
-  <div class="bottom-center" id="timeDisplay">--:--:--</div>
-
-  <!-- Include fluid simulation script -->
-  <script src="https://cdn.jsdelivr.net/gh/PavelDoGreat/WebGL-Fluid-Simulation/script.js"></script>
-
-  <script>
-    // Optional configs from the script.js global CONFIG object
-    if (typeof CONFIG !== "undefined") {
-      CONFIG.SHADING = true;
-      CONFIG.BLOOM = true;
-      CONFIG.COLORFUL = true;
-      CONFIG.SPLAT_RADIUS = 0.008;
-    }
-
-    // Automated random splashes for cool effect
-    function randomColor() {
-      return { r: Math.random(), g: Math.random(), b: Math.random() };
-    }
-
-    function autoSplash() {
-      const x = Math.random() * window.innerWidth;
-      const y = Math.random() * window.innerHeight;
-      const dx = (Math.random() - 0.5) * 1000;
-      const dy = (Math.random() - 0.5) * 1000;
-      const color = randomColor();
-      if (typeof splat === "function") {
-        splat(x, y, dx, dy, color);
-      }
-    }
-
-    setInterval(autoSplash, 2500);
-
-    // Theme toggle button
-    const toggle = document.getElementById("themeToggle");
-    toggle.addEventListener("click", () => {
-      document.body.classList.toggle("light-mode");
-      toggle.textContent = document.body.classList.contains("light-mode") ? "🌙" : "☀️";
-    });
-    toggle.textContent = document.body.classList.contains("light-mode") ? "🌙" : "☀️";
-
-    // Clock display
-    function updateTime() {
-      const now = new Date();
-      const timeString = now.toLocaleTimeString();
-      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      document.getElementById("timeDisplay").textContent = `${timeString} (${timeZone})`;
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
-  </script>
 </body>
 </html>
